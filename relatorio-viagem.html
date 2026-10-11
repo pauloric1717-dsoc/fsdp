@@ -795,14 +795,6 @@ function buildRelatorio(d, JsPDFCtor){
   cellRect(M,CUR,wIV,h3); cellLV('Ida (hora/data): ', d.ida_hd, M, CUR, wIV, h3);
   cellRect(M+wIV,CUR,wIV,h3); cellLV('Volta (hora/data): ', d.volta_hd, M+wIV, CUR, wIV, h3);
   CUR+=h3;
-  // BI fracionado: Nr | Data | OM — composto no PDF como no original
-  var h3=18;
-  // afastamento | ida | volta
-  var w3a=CW*0.34, w3b=CW*0.33, w3c=CW-w3a-w3b;
-  cellRect(M,CUR,w3a,h3); cellLV('Afastamento da sede: ', d.afast, M, CUR, w3a, h3);
-  cellRect(M+w3a,CUR,w3b,h3); cellLV('Ida (hora/data): ', d.ida_hd, M+w3a, CUR, w3b, h3);
-  cellRect(M+w3a+w3b,CUR,w3c,h3); cellLV('Volta (hora/data): ', d.volta_hd, M+w3a+w3b, CUR, w3c, h3);
-  CUR+=h3;
   // BI: célula única com a frase composta "BI nº 62 de 27/08/2026 do ComDCiber."
   cellRect(M,CUR,CW,h3);
   var biTxt='';
