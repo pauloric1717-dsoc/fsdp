@@ -223,10 +223,11 @@
       </div>
       <div class="field" id="wrap_retorno_outra" hidden><label>Em (data)</label>
         <input id="f_retorno_outra" placeholder="___/___/___"></div>
-      <div class="field" style="grid-column:span 3"><label>BI que autorizou a concessão de diárias <span class="sub-hint">(replica o BI da autorização — pode alterar)</span></label>
+      <div class="field" style="grid-column:span 3"><label>BI que autorizou a concessão de diárias <span class="sub-hint">Preencher somente se for diferente do BI de autorização</span></label>
         <input id="f_bi_diarias" placeholder="BI nº 62 de 27/08/2026, do ComDCiber."></div>
-      <div class="field"><label>Dias de afastamento</label>
-        <input id="f_dias" placeholder="6 dias."></div>
+      <div class="field"><label>Dias de afastamento <span class="sub-hint">preenchimento exclusivo do militar</span></label>
+        <input id="f_dias" placeholder="6 dias.">
+        <span class="sub" id="dias_sugestao"></span></div>
       <div class="field"><label>Valor total das diárias recebidas</label>
         <input id="f_valor" value="R$ 0,00"></div>
     </div>
@@ -1038,12 +1039,10 @@ function buildRelatorio(d, JsPDFCtor){
     var anoN=ano?('20'+String(ano).padStart(2,'0')):'';
     function isoFromDia(dia){ return (dia&&mesN&&anoN)?anoN+'-'+mesN+'-'+String(dia).padStart(2,'0'):''; }
     var voltaISO=isoFromDia($('h_volta_d').value);
+    // sugestão de contagem (NÃO vai para o PDF — preenchimento exclusivo do militar)
     var diasAuto=calcDias(val('f_afast'), voltaISO);
-    // auto-preenche o BI de diárias com o BI da autorização (editável)
-    if(!val('f_bi_diarias')){
-      var Nr=val('f_bi_nr'), Dt=fmtBR(val('f_bi_data')), Om=val('f_bi_om');
-      if(Nr||Dt||Om) $('f_bi_diarias').value='BI nº '+(Nr||'___')+' de '+(Dt||'___/___/____')+', do '+(Om||'___')+'.';
-    }
+    $('dias_sugestao').textContent=diasAuto?('Sugestão: '+diasAuto):'';
+    // BI de diárias: NÃO auto-preenche — o PDF replica o BI da autorização quando este campo estiver vazio
     var d={
       pcdp:val('f_pcdp'), orgao:val('f_orgao'),
       benef:(document.querySelector('input[name=f_benef]:checked')||{value:'Militar'}).value,
@@ -1056,7 +1055,7 @@ function buildRelatorio(d, JsPDFCtor){
       retorno_tipo:(document.querySelector('input[name=f_retorno_tipo]:checked')||{value:'prevista'}).value,
       retorno_outra:val('f_retorno_outra'),
       bi_diarias:val('f_bi_diarias'),
-      dias:diasAuto||val('f_dias'), valor:val('f_valor'),
+      dias:val('f_dias'), valor:val('f_valor'),
       translacao:(document.querySelector('input[name=f_translacao]:checked')||{value:'1'}).value,
       bilhetes:getBilhetes(),
       voos:getVoos(),
